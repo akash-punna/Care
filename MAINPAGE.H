@@ -11,6 +11,123 @@
 
 void home();
 
+//----------------------------------------------------------LOCAL INFO--------------------------------------------------
+
+
+#define mx 100
+#define size 31
+
+struct city{
+ char name[mx],cases[mx],time[mx];
+ struct city*next;
+ };
+ struct city *ar[size],*res,*temp;
+
+
+ int hcode(char a[])
+ {
+   int key=0;
+   int j;
+
+   for(j=0;j< strlen(a);j++)
+    key=size*key+a[j];
+    key=key%size;
+   return key;
+ }
+ void dictionary(char a[],char c[],char t[])
+ { struct city *nn=(struct city *)malloc(sizeof(struct city));
+   int key;
+   strcpy(nn->name,a);
+   strcpy(nn->cases,c);
+   strcpy(nn->time,t);
+   nn->next=NULL;
+   key=hcode(a);
+   if(ar[key]==NULL)
+    ar[key]=nn;
+   else
+   { temp=ar[key];
+     while(temp->next!=NULL)
+      temp=temp->next;
+     temp->next=nn;
+   }
+ }
+
+ void read_file()
+ {
+  char a[mx],c[mx],t[mx];
+  int i;
+  FILE *fp=fopen("new.txt","r");
+  if(fp==NULL)printf("not there");
+  for(i=1;i<=20;i++)
+  { 
+    fscanf(fp,"%s %s %[\^*]",&a,&c,&t);
+    dictionary(a,c,t);
+  }
+  fclose(fp);
+ }
+
+ struct city* cisearch(char x[])
+ { int key=hcode(x);
+   if(ar[key]!=NULL)
+   { temp=ar[key];
+     while(temp){
+      if(strcmp(temp->name,x)==0)
+       return temp;
+      temp=temp->next;
+     }
+    }
+    return NULL;
+ }
+
+ void display3(struct city *res)
+ {
+   printf(" the city you entered is %s\n",res->name);
+   printf("   total positive cases in this city is %s\n\n",res->cases);
+ }
+
+ void display4(struct city *res)
+ {
+  printf("the city you entered is %s\n",res->name);
+  printf("  timings: %s\n\n",res->time);
+ }
+
+ void local_main()
+ {
+    char st[mx];
+  int op;
+  int gd=DETECT,gm;
+  closegraph();
+  clrscr();
+  read_file();
+      do{
+
+      printf("enter 1. To know no. of positive cases of a city\n2. To know active timings of a city during LOCKDOWN\n3.exit\n");
+      scanf("%d",&op);
+  switch(op)
+  { case 1:printf("   enter city name with '*' ");
+     scanf("%s",&st);
+     res=cisearch(st);
+     if(res==NULL)
+      printf("sorry for inconvience\n The city u entered is out of our data we will update it soon\n\n");
+     else
+
+      display3(res);
+    break;
+   case 2: printf(" enter city name with '*' ");
+     scanf("%s",&st);
+     res=cisearch(st);
+     if(res==NULL)
+      printf("sorry the city is out of data \n we will update it soon\n\n");
+     else
+      display4(res);
+     break;
+   }
+       }while(op!=3);
+
+    initgraph(&gd,&gm,"c:\\turboc3\\bgi");
+    settextstyle(3,0,1);
+    //home();
+ }
 
 
 //-------------------------------------------------------------INFO & SURVEY PAGE ---------------------------------------
@@ -26,6 +143,7 @@ void aware()
 	fp=fopen("aware.txt","r");
 	fscanf(fp,"%[^*]",c);
 	printf("%s",c);
+	getch();
 	fclose(fp);
 	return;
 }
@@ -106,8 +224,9 @@ void survey_main(){
 		}
 	}while(choice<3);
 	initgraph(&gd,&gm,"c:\\turboc3\\bgi");
-	home();
-	getch();
+	settextstyle(3,0,1);
+    //home();
+    return;
 }
 
 
@@ -120,7 +239,6 @@ void complaint_main(){
 	char num[MAX_STR], temp[MAX_STR],c[2],txt[10],ch[MAX_STR],bit,data[1000],some[MAX_STR],op=' ';
 	int n,i,j=1,k=1,z=1;
 
-	initgraph(&gd,&gm,"c:\\turboc3\\bgi");
 	cleardevice();
 
 	fp = fopen("manage.txt","r");
@@ -163,7 +281,8 @@ void complaint_main(){
 
 	sprintf(ch,"%d",k%(n+2));
 
-	if(k%(n+2)==n+1)home();
+	if(k%(n+2)==n+1){settextstyle(3,0,1);//home();
+		return;}
 
 	cleardevice();
 
@@ -197,6 +316,7 @@ void complaint_main(){
 		printf("Thank you....We will look into it...:)");
 		printf("\n\nPress any key to go back");
 	    getch();
+	    initgraph(&gd,&gm,"c:\\turboc3\\bgi");
 	    complaint_main();
 	}
 	else
@@ -210,6 +330,7 @@ void complaint_main(){
 	    fclose(fp);
 	    printf("\n\nPress any key to go back");
 	    getch();
+	    initgraph(&gd,&gm,"c:\\turboc3\\bgi");
 	    complaint_main();
 	}	
 }
@@ -405,7 +526,8 @@ void states_main(){
 	while(1){
 		if(states_display()==-1)
 		{
-			fflush(stdin);settextstyle(3,0,1);home();
+			fflush(stdin);settextstyle(3,0,1);//home();
+			return;
 		}	
 	}
 }
@@ -429,7 +551,7 @@ void background(){
 	int x,y;
 	int i = 0;
 	setcolor(WHITE);
-	settextstyle(4,0,5);
+	settextstyle(3,0,4);
 	outtextxy(250,50,"Care");
 	settextstyle(8,0,1);
 	outtextxy(300,100,"We are with you.");
@@ -447,8 +569,7 @@ void background(){
 int display_option(){
 	int i=0,j,colour[7],x,y;
 	int op = 7;
-    settextstyle(3,0,3);
-    fflush(stdin);
+    settextstyle(3,0,1);
     do{
 		x=200;
         y=180;
@@ -499,14 +620,15 @@ void home(){
 				break;
 		case 3:survey_main();
 				break;
-		case 4:
-		break;
+		case 4://donations_main();
+				break;
 		case 5:
-		break;
-		case 6:
-		break;
+				break;
+		case 6:local_main();
+				break;
 	}
-	exit(0);
+	home();
+	//sexit(0);
 }
 
 // void main() {
@@ -529,5 +651,3 @@ void home(){
 // 	getch();
 // 	closegraph();
 // }
-
-
