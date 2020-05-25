@@ -1,0 +1,10 @@
+*mumbai  1432  6:00am to 12:00pm *banglore 457  7:00am to 12:00pm
+*kota  556  10:00am to 12:00pm  *ahmedabad  456  7:00am to 2:00pm
+*pune  668  10:00am to 4:00pm  *chennai  786  9:00am to 6:00pm
+*jaipur 568  7:00am to 12:00pm *surat  667  8:00am t0 11:00am
+*nagpur 453  6:00am to 6:00pm
+*visakhapatnam  234  7:00am to 6:00pm *bhopal 678 8:00am to 6:00pm
+*patna  345 10:00am to 4:00pm  *agra 678  10:00am to 5:00pm
+*amravathi 1032 6:00am to 12:00pm *nellore 366 10:00am to 6:00pm
+*warangal  886  6:00am to 4:00pm *madurai  556  10:00am to 5:00pm
+*ranchi  567  6:00am to 4:00pm  *vijayawada  778  7:00am to 7:00pm
