@@ -11,6 +11,260 @@
 
 void home();
 
+
+//----------------------------------------------------DONATIONS-------------------------------------------------------
+
+ typedef struct node
+ {
+   char s[20];
+   int fund;
+  struct node *next;
+   }node;
+   struct codes
+   {
+     char name[15];
+     char pin[6];
+     }a[5];
+
+ node  *first=NULL,*last=NULL;
+ enum bool{false,true};
+ enum bool isempty()
+ {
+ if(first==NULL)
+   return true;
+ else
+   return false;
+ }
+
+
+
+void insert()
+{
+     FILE *fp,*c;
+   node *nn;
+  char str[20];
+  int n,opt,k=0;
+  c=fopen("count1.txt","r");
+      fp=fopen("donors1.txt","a");
+      if(fp==NULL||c==NULL)
+  printf("ERROR OCCURED\n");
+    else
+    {
+   nn=(node *)malloc(sizeof(node));
+   printf("\n\n\n    ENTER NAME OF DONOR:");
+   scanf("%s",str);
+   printf("    ENTER FUND:");
+   scanf("%d",&n);
+   strcpy(nn->s,str);
+   nn->fund=n;
+   nn->next=NULL;
+   if(isempty())
+   {
+     first=nn;
+     first->next=NULL;
+     last=nn;
+    }
+    else
+      {
+       last->next=nn;
+       last=nn;
+       last->next=NULL;
+       }
+       printf("\n\n  using\n  1:Phonepay\n  2:googlepay\n  3:patym\n  4:exit\n");
+       scanf("%d",&opt);
+       clrscr();
+       if(opt==1||opt==2||opt==3)
+       {
+       if(pinsearch()!=4)
+   {
+   fscanf(c,"%d",&k);
+   fclose(c);
+  c=fopen("count1.txt","w");
+   k++;
+   fprintf(c,"%d",k);
+   //printf("%s %d",str,n);
+   fprintf(fp,"%s %d ",str,n);
+   //fwrite(nn,sizeof(node),1,fp);
+  }
+
+     }
+     fclose(c);
+    fclose(fp);
+    }
+   }
+ int pinsearch()
+   {
+      FILE *ff;
+      char c[10],v[6];
+      int i,flag=-1;
+      struct codes b[10];
+      ff=fopen("code.txt","r");
+      if(ff==NULL)
+      {
+  printf("ERROR OCCURED\n");
+  return -1;
+  }
+       else
+       {
+      //fread(b,sizeof(struct codes),10,ff);
+     for(i=0;i<10;i++)
+       fscanf(ff,"%s %s\n",&b[i].name,&b[i].pin);
+     // for(i=0;i<10;i++)
+     //   printf("%s %d\n",b[i].name,b[i].pin);
+      printf("enter UPI id:");
+      scanf("%s",c);
+     printf("enter password:");
+     scanf("%s",v);
+     clrscr();
+     for(i=0;i<10;i++)
+     {
+
+  if((strcmp(c,b[i].name))==0)
+  {
+  //printf("%s",b[i].pin);
+ // delay(1000);
+     if((strcmp(v,b[i].pin))==0)
+     {
+        printf("\n           THANK YOU FOR DONATING\n\n\n              STAY HOME STAY SAFE\n\n");
+        flag=1;
+        break;
+
+        }
+      }
+
+     }
+  fclose(ff);
+  if(flag==-1)
+  {   printf("\n\nINCORRECT PASSWORD\n\nplease try again\n\n");
+    return(-1);
+    }
+   else  if(flag==1)
+     {
+  return(1);
+  }
+  else
+  return(-1);
+   }
+  }
+
+
+
+   void quicksort(node arr[],int lb,int ub)
+   {
+      int loc;
+      if(lb<ub)
+      {
+  loc=partition(arr,lb,ub);
+  quicksort(arr,lb,loc-1);
+  quicksort(arr,(loc+1),ub);
+  }
+   }
+ int partition(node a[],int lb,int ub)
+ {
+ node temp;
+    int pivot,start,end;
+    pivot=a[lb].fund;
+    start=lb;
+    end=ub;
+     while(start<end)
+     {
+   while(a[start].fund<=pivot)
+       start++;
+
+    while(a[end].fund>pivot)
+       end--;
+     if(start<end)
+     {
+        temp=a[start];
+        a[start]=a[end];
+        a[end]=temp;
+        }
+    }
+    temp=a[lb];
+    a[lb]=a[end];
+     a[end]=temp;
+     return end;
+
+  }
+
+
+
+
+
+
+
+
+
+
+   void top()
+   {
+       FILE *fp,*c;
+       node b[50];
+       char name[100];
+       int i,k,v;
+       long long int sum=0;
+       int amt;
+       fp=fopen("donors1.txt","r");
+       c=fopen("count1.txt","r");
+       fscanf(c,"%d",&k);
+       for(i=0;i<k;i++)
+       {
+         fscanf(fp,"%s %d\n",name,&amt);
+         strcpy(b[i].s, name);
+          b[i].fund = amt;
+       }
+     quicksort(b,0,k-1);
+     printf("TOP DONORS:\n");
+   for(i=k-1;i>k-4;i--)
+     printf(" \n %s - %5d   ",b[i].s,b[i].fund);
+  for(i=0;i<k;i++)
+  {
+    sum=sum+b[i].fund;
+    }
+     printf("\n\n      TOTAL FUND=%d\n\n",sum);
+    fclose(c);
+    fclose(fp);
+
+ }
+
+
+
+
+
+
+
+
+
+
+
+
+    void donate_main()
+    {
+      int opt;
+      int gd=DETECT,gm;
+      closegraph();
+      clrscr();
+      while(1)
+      {
+  printf("1:DONATE FUND\n\n2:DISPLAY DONORS\n\n3:EXIT\n\n");
+  scanf("%d",&opt);
+  clrscr();
+  if(opt==3)
+     break;
+     if(opt==1)
+        insert();
+     else if(opt==2)
+    top();
+    }
+    initgraph(&gd,&gm,"c:\\turboc3\\bgi");
+    settextstyle(3,0,1);
+    home();
+ }
+
+
+
+
+
 //----------------------------------------------------------LOCAL INFO--------------------------------------------------
 
 
@@ -126,7 +380,7 @@ struct city{
 
     initgraph(&gd,&gm,"c:\\turboc3\\bgi");
     settextstyle(3,0,1);
-    //home();
+    home();
  }
 
 
@@ -225,7 +479,7 @@ void survey_main(){
 	}while(choice<3);
 	initgraph(&gd,&gm,"c:\\turboc3\\bgi");
 	settextstyle(3,0,1);
-    //home();
+    home();
     return;
 }
 
@@ -238,7 +492,7 @@ void complaint_main(){
 	int gd=DETECT,gm;
 	char num[MAX_STR], temp[MAX_STR],c[2],txt[10],ch[MAX_STR],bit,data[1000],some[MAX_STR],op=' ';
 	int n,i,j=1,k=1,z=1;
-
+	initgraph(&gd,&gm,"c:\\turboc3\\bgi");
 	cleardevice();
 
 	fp = fopen("manage.txt","r");
@@ -281,7 +535,7 @@ void complaint_main(){
 
 	sprintf(ch,"%d",k%(n+2));
 
-	if(k%(n+2)==n+1){settextstyle(3,0,1);//home();
+	if(k%(n+2)==n+1){settextstyle(3,0,1);home();
 		return;}
 
 	cleardevice();
@@ -316,7 +570,6 @@ void complaint_main(){
 		printf("Thank you....We will look into it...:)");
 		printf("\n\nPress any key to go back");
 	    getch();
-	    initgraph(&gd,&gm,"c:\\turboc3\\bgi");
 	    complaint_main();
 	}
 	else
@@ -330,7 +583,6 @@ void complaint_main(){
 	    fclose(fp);
 	    printf("\n\nPress any key to go back");
 	    getch();
-	    initgraph(&gd,&gm,"c:\\turboc3\\bgi");
 	    complaint_main();
 	}	
 }
@@ -526,7 +778,7 @@ void states_main(){
 	while(1){
 		if(states_display()==-1)
 		{
-			fflush(stdin);settextstyle(3,0,1);//home();
+			fflush(stdin);settextstyle(3,0,1);home();
 			return;
 		}	
 	}
@@ -620,15 +872,15 @@ void home(){
 				break;
 		case 3:survey_main();
 				break;
-		case 4://donations_main();
+		case 4:donate_main();
 				break;
 		case 5:
 				break;
 		case 6:local_main();
 				break;
 	}
-	home();
-	//sexit(0);
+	//home();
+	exit(0);
 }
 
 // void main() {
