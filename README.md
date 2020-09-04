@@ -7,3 +7,5 @@ Run start.c file.
 1. Corona stats in all states (uses priority queue, dictionaries )
 2. Local Information ( uses dictionaries, heaps )
 3. Fund Raiser (uses dictionaries, quick sort )
+
+![giffy](dsgif.gif)
